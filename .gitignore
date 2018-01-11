@@ -1,0 +1,6 @@
+/target/
+**/*.rs.bk
+Cargo.lock
+.env
+*.log
+ebay_tests/data
