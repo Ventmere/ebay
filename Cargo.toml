@@ -1,0 +1,7 @@
+[workspace]
+members = [
+  "ebay",
+  "ebay_tests",
+]
+[patch.crates-io]
+ebay = { path = "./ebay" }
