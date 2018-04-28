@@ -1,8 +1,8 @@
 //! Getting third-party permissions
 //! [Doc](https://developer.ebay.com/api-docs/static/oauth-permissions-grant-request.html)
 
-use result::EbayResult;
 use super::Credential;
+use result::EbayResult;
 
 #[derive(Debug)]
 pub struct GrantUrl {
@@ -17,27 +17,29 @@ impl ToString for GrantUrl {
 }
 
 #[derive(Debug)]
-pub struct Grant {
-  pub host: &'static str,
-  pub credential: Credential,
+pub struct Grant<'a> {
+  pub credential: &'a Credential,
   /// eBay uses RuName as redirect_url
   /// [Doc](https://developer.ebay.com/api-docs/static/oauth-redirect-uri.html)
-  pub ru_name: String,
-  pub scopes: Vec<String>,
+  pub ru_name: &'a str,
+  pub scopes: &'a [&'a str],
 }
 
-impl Grant {
+impl<'a> Grant<'a> {
   pub fn build_grant_url<S: ToString>(&self, state: S) -> EbayResult<GrantUrl> {
     use url::Url;
 
-    let base = format!("https://{}/authorize", self.host);
-    let u = Url::parse_with_params(&base, &[
-      ("client_id", self.credential.client_id.clone()),
-      ("redirect_uri", self.ru_name.clone()),
-      ("response_type", "code".to_string()),
-      ("state", state.to_string()),
-      ("scope", self.scopes.join(" ")),
-    ])?;
+    let base = "https://auth.ebay.com/oauth2/authorize";
+    let u = Url::parse_with_params(
+      base,
+      &[
+        ("client_id", self.credential.client_id.clone()),
+        ("redirect_uri", self.ru_name.to_string()),
+        ("response_type", "code".to_string()),
+        ("state", state.to_string()),
+        ("scope", self.scopes.join(" ")),
+      ],
+    )?;
 
     Ok(GrantUrl {
       url: u.to_string(),

@@ -2,6 +2,7 @@
 members = [
   "ebay",
   "ebay_tests",
+  "ebay_cli"
 ]
 [patch.crates-io]
 ebay = { path = "./ebay" }

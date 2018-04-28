@@ -1,9 +1,10 @@
-mod grant;
 mod exchange;
+mod grant;
 mod refresh;
 
-pub use self::grant::{Grant, GrantUrl};
 pub use self::exchange::{Exchange, ExchangeResponse};
+pub use self::grant::{Grant, GrantUrl};
+pub use self::refresh::{Refresh, RefreshResponse};
 
 #[derive(Debug, Clone)]
 pub struct Credential {

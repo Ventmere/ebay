@@ -6,11 +6,16 @@ error_chain! {
       description("request error")
       display("request error: path = '{}', status = '{}', body = '{}'", path, status, body)
     }
+    Deserialize(msg: String, body: String) {
+      description("deserialize body error")
+      display("deserialize body error: {}, body = '{}'", msg, body)
+    }
   }
 
   foreign_links {
     Url(::url::ParseError);
     Http(::reqwest::Error);
+    Json(::serde_json::Error);
   }
 }
 
