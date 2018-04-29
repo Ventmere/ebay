@@ -3,6 +3,7 @@ extern crate ebay;
 extern crate serde_json;
 #[macro_use]
 extern crate serde_derive;
+extern crate chrono;
 extern crate serde;
 #[macro_use]
 extern crate clap;
@@ -37,6 +38,9 @@ fn main() {
         (about: "Retrieve the contents of an order based on its unique identifier")
         (@arg ID: +required "eBay order id")
       )
+      (@subcommand get_recent_orders =>
+        (about: "Retrieve recent orders")
+      )
       (@subcommand get_fulfillment =>
         (about: "Retrieve the contents of a fulfillment based on its unique identifier")
         (@arg ID: +required "eBay fulfillment id")
@@ -51,6 +55,12 @@ fn main() {
           (|m| {
             let id = m.value_of("ID").unwrap();
             sell::order::get_order(id)
+          })
+        )
+
+        (get_recent_orders =>
+          (|_| {
+            sell::order::get_recent_orders()
           })
         )
 
