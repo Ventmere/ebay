@@ -1,8 +1,8 @@
+extern crate chrono;
 extern crate dotenv;
 extern crate ebay;
-extern crate serde_json;
-extern crate chrono;
 extern crate serde;
+extern crate serde_json;
 #[macro_use]
 extern crate clap;
 
