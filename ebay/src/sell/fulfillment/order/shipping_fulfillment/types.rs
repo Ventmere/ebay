@@ -49,3 +49,55 @@ pub struct ShippingFulfillmentDetails {
   #[serde(rename = "lineItems")]
   pub line_items: Option<Vec<LineItemReference>>,
 }
+
+impl ShippingFulfillmentDetails {
+  pub fn new(carrier_code: &str, tracking: &str) -> ShippingFulfillmentDetailsBuilder {
+    ShippingFulfillmentDetailsBuilder {
+      inner: ShippingFulfillmentDetails {
+        tracking_number: tracking.to_owned().into(),
+        shipping_carrier_code: carrier_code.to_owned().into(),
+        shipping_service_code: None,
+        shipped_date: Some(Utc::now()),
+        line_items: None,
+      },
+    }
+  }
+}
+
+pub struct ShippingFulfillmentDetailsBuilder {
+  inner: ShippingFulfillmentDetails,
+}
+
+impl ShippingFulfillmentDetailsBuilder {
+  pub fn shipping_service_code(&mut self, code: &str) -> &mut Self {
+    self.inner.shipping_service_code = code.to_owned().into();
+    self
+  }
+
+  pub fn shipped_date(&mut self, date: DateTime<Utc>) -> &mut Self {
+    self.inner.shipped_date = date.into();
+    self
+  }
+
+  pub fn add_item(&mut self, line_item_id: &str) -> &mut Self {
+    self
+      .inner
+      .line_items
+      .get_or_insert_with(|| vec![])
+      .push(LineItemReference {
+        line_item_id: line_item_id.to_owned(),
+      });
+    self
+  }
+
+  pub fn finalize(&mut self) -> ShippingFulfillmentDetails {
+    let replace = ShippingFulfillmentDetails {
+      tracking_number: self.inner.tracking_number.clone(),
+      shipping_carrier_code: self.inner.shipping_carrier_code.clone(),
+      shipping_service_code: None,
+      shipped_date: Some(Utc::now()),
+      line_items: None,
+    };
+    ::std::mem::replace(&mut self.inner, replace)
+  }
+}
