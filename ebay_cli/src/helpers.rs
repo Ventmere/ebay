@@ -1,4 +1,7 @@
 use ebay::{auth::Credential, client::EbayClient};
+use serde::Serialize;
+use serde_json;
+use std::io::stdout;
 
 struct Env {
   pub host: String,
@@ -32,4 +35,8 @@ pub fn get_client() -> EbayClient {
     &env.credential.client_secret,
     &env.refresh_token,
   ).finalize()
+}
+
+pub fn dump_json<T: Serialize>(v: T) {
+  serde_json::to_writer_pretty(stdout(), &v).unwrap()
 }

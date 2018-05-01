@@ -39,9 +39,18 @@ fn main() {
       (@subcommand get_recent_orders =>
         (about: "Retrieve recent orders")
       )
+      (@subcommand get_unshipped_orders =>
+        (about: "Retrieve unshipped orders")
+      )
       (@subcommand get_fulfillments =>
         (about: "Retrieve the contents of all fulfillments currently defined for a specified order based on the order's unique identifier")
         (@arg ORDER_ID: +required "eBay order id")
+      )
+      (@subcommand ship =>
+        (@arg ORDER_ID: +required "eBay order id")
+        (@arg LINE_ITEM_ID: +required "Line item id")
+        (@arg CARRIER: -c --cariier +required +takes_value "Carrier")
+        (@arg TRACKING: -t --tracking +required +takes_value "Tracking number")        
       )
     )
   ).get_matches();
@@ -62,10 +71,37 @@ fn main() {
           })
         )
 
+        (get_unshipped_orders =>
+          (|_| {
+            sell::order::get_unshipped_orders()
+          })
+        )
+
         (get_fulfillments =>
           (|m| {
             let order_id = m.value_of("ORDER_ID").unwrap();
             sell::order::get_fulfillments(order_id)
+          })
+        )
+
+        (ship =>
+          (|m| {
+            use ebay::sell::fulfillment::*;
+            let client = helpers::get_client();
+            let order_id = m.value_of("ORDER_ID").unwrap();
+            let line_item_id = m.value_of("LINE_ITEM_ID").unwrap();
+            let carrier = m.value_of("CARRIER").unwrap();
+            let tracking = m.value_of("TRACKING").unwrap();
+            let shipment = ShippingFulfillmentDetails::new(carrier, tracking)
+              .add_item(line_item_id)
+              .finalize();
+
+            println!("Request:");
+            helpers::dump_json(&shipment);
+
+            println!("\nResponse:");
+            let res = client.create_shipping_fulfillment(order_id, &shipment).unwrap();
+            helpers::dump_json(res)
           })
         )
       )

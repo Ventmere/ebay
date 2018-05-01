@@ -18,6 +18,13 @@ pub fn get_recent_orders() {
   serde_json::to_writer_pretty(stdout(), &res).unwrap();
 }
 
+pub fn get_unshipped_orders() {
+  let mut params = GetOrdersParams::default();
+  params.filter = Filter::new().status_not_started_in_progress().into();
+  let res = get_client().get_orders(&params).unwrap();
+  serde_json::to_writer_pretty(stdout(), &res).unwrap();
+}
+
 pub fn get_fulfillments(order_id: &str) {
   let res = get_client().get_shipping_fulfillments(order_id).unwrap();
   serde_json::to_writer_pretty(stdout(), &res).unwrap();

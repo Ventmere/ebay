@@ -1,5 +1,6 @@
 use chrono::{DateTime, Utc};
 use serde_json::Value;
+use types::EbayDateTime;
 
 #[derive(Serialize, Deserialize)]
 pub struct ShippingFulfillment {
@@ -36,7 +37,7 @@ pub struct ShippingFulfillmentPagedCollection {
   pub warnings: Option<Vec<Value>>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize)]
 pub struct ShippingFulfillmentDetails {
   #[serde(rename = "trackingNumber")]
   pub tracking_number: Option<String>,
@@ -45,7 +46,7 @@ pub struct ShippingFulfillmentDetails {
   #[serde(rename = "shippingServiceCode")]
   pub shipping_service_code: Option<String>,
   #[serde(rename = "shippedDate")]
-  pub shipped_date: Option<DateTime<Utc>>,
+  pub shipped_date: Option<EbayDateTime>,
   #[serde(rename = "lineItems")]
   pub line_items: Option<Vec<LineItemReference>>,
 }
@@ -57,7 +58,7 @@ impl ShippingFulfillmentDetails {
         tracking_number: tracking.to_owned().into(),
         shipping_carrier_code: carrier_code.to_owned().into(),
         shipping_service_code: None,
-        shipped_date: Some(Utc::now()),
+        shipped_date: Some(Utc::now().into()),
         line_items: None,
       },
     }
@@ -75,7 +76,7 @@ impl ShippingFulfillmentDetailsBuilder {
   }
 
   pub fn shipped_date(&mut self, date: DateTime<Utc>) -> &mut Self {
-    self.inner.shipped_date = date.into();
+    self.inner.shipped_date = EbayDateTime::new(date).into();
     self
   }
 
@@ -95,7 +96,7 @@ impl ShippingFulfillmentDetailsBuilder {
       tracking_number: self.inner.tracking_number.clone(),
       shipping_carrier_code: self.inner.shipping_carrier_code.clone(),
       shipping_service_code: None,
-      shipped_date: Some(Utc::now()),
+      shipped_date: Some(Utc::now().into()),
       line_items: None,
     };
     ::std::mem::replace(&mut self.inner, replace)

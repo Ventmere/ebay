@@ -43,7 +43,7 @@ impl<'a> Refresh<'a> {
       })
       .send()?;
 
-    check_resp!(url, resp);
+    check_resp!(resp);
 
     let resp = read_ebay_response(&mut resp)?;
 

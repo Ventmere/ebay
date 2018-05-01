@@ -1,4 +1,4 @@
-use reqwest::{Response, StatusCode};
+use reqwest::Response;
 use result::{EbayResult, ErrorKind};
 use serde::Deserialize;
 use serde_json;
@@ -6,13 +6,12 @@ use serde_json;
 #[doc(hidden)]
 #[macro_export]
 macro_rules! check_resp {
-  ($url:expr, $resp:expr) => {{
-    use reqwest::StatusCode;
+  ($resp:expr) => {{
     use result::ErrorKind;
 
-    if $resp.status() != StatusCode::Ok {
+    if !$resp.status().is_success() {
       let body = $resp.text()?;
-      return Err(ErrorKind::Request($url.to_owned(), $resp.status(), body).into());
+      return Err(ErrorKind::Request($resp.url().to_string(), $resp.status(), body).into());
     }
   }};
 }
@@ -20,7 +19,7 @@ macro_rules! check_resp {
 pub fn read_ebay_response<T: for<'de> Deserialize<'de>>(resp: &mut Response) -> EbayResult<T> {
   let body = resp.text()?;
 
-  if resp.status() != StatusCode::Ok {
+  if !resp.status().is_success() {
     return Err(ErrorKind::Request(resp.url().to_string(), resp.status(), body).into());
   }
 
