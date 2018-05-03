@@ -1,6 +1,6 @@
 [package]
 name = "ebay"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["fluxxu <fluxxu@gmail.com>"]
 description = "eBay API client for Rust."
 license = "MIT"
