@@ -8,6 +8,7 @@ extern crate clap;
 
 mod helpers;
 mod sell;
+mod test;
 
 macro_rules! dispatch {
   ($matches:expr => $head:tt $($rest:tt)*) => {
@@ -23,13 +24,14 @@ macro_rules! dispatch {
 
   (ITEM $matches:expr, ($cmd:ident => $($sub:tt)+)) => {
     if let Some(matches) = $matches.subcommand_matches(stringify!($cmd)) {
-      dispatch!(matches => $($sub)*); 
+      dispatch!(matches => $($sub)*);
     }
   };
 }
 
 fn main() {
   let matches = clap_app!(myapp =>
+    (@subcommand test => )
     (@subcommand order =>
       (about: "Manage orders")
       (@subcommand get =>
@@ -53,10 +55,30 @@ fn main() {
         (@arg TRACKING: -t --tracking +required +takes_value "Tracking number")        
       )
     )
+    (@subcommand inventory =>
+      (@subcommand bulk_migrate_listing =>
+        (@arg LISTING_IDS: -i ... +takes_value "Add listing id")
+      )
+      (@subcommand get_inventory_locations =>
+        (about: "Retrieves all defined details for every inventory location associated with the seller's account")
+      )
+      (@subcommand get_inventory_items =>
+        (about: "Retrieves all inventory item records defined for the seller's account")
+      )
+      (@subcommand get_offers =>
+        (about: "Retrieves all existing offers for the specified SKU value")
+        (@arg SKU: +required "eBay SKU")
+      )
+    )
   ).get_matches();
 
   dispatch! {
     matches =>
+      (test =>
+        (|_| {
+          test::run()
+        })
+      )
       (order =>
         (get =>
           (|m| {
@@ -102,6 +124,39 @@ fn main() {
             println!("\nResponse:");
             let res = client.create_shipping_fulfillment(order_id, &shipment).unwrap();
             helpers::dump_json(res)
+          })
+        )
+      )
+      (inventory =>
+        (migrate =>
+          (|_| {
+            sell::inventory::get_inventory_locations()
+          })
+        )
+
+        (get_inventory_locations =>
+          (|_| {
+            sell::inventory::get_inventory_locations()
+          })
+        )
+
+        (get_inventory_items =>
+          (|_| {
+            sell::inventory::get_inventory_items()
+          })
+        )
+
+        (get_offers =>
+          (|m| {
+            let sku = m.value_of("SKU").unwrap();
+            sell::inventory::get_offers(&sku)
+          })
+        )
+
+        (bulk_migrate_listing =>
+          (|m| {
+            let ids: Vec<_> = m.values_of("LISTING_IDS").expect("No listing ids (-i)").collect();
+            sell::inventory::bulk_migrate_listing(&ids);
           })
         )
       )

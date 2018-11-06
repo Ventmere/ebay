@@ -28,6 +28,7 @@ pub struct EbayClient {
   http: Client,
   credential: Credential,
   refresh_token: String,
+  trading_api_token: String,
   access_token: RwLock<Option<AccessToken>>,
   scopes: Vec<&'static str>,
 }
@@ -47,6 +48,7 @@ impl EbayClientBuilder {
       credential: self.inner.credential.clone(),
       http: self.inner.http.clone(),
       refresh_token: self.inner.refresh_token.clone(),
+      trading_api_token: self.inner.trading_api_token.clone(),
       access_token: RwLock::new(None),
       scopes: ALL_SCOPES.iter().cloned().collect(),
     };
@@ -55,14 +57,26 @@ impl EbayClientBuilder {
 }
 
 impl EbayClient {
-  pub fn new(client_id: &str, client_secret: &str, refresh_token: &str) -> EbayClientBuilder {
-    Self::with_http_client(client_id, client_secret, refresh_token, Client::new())
+  pub fn new(
+    client_id: &str,
+    client_secret: &str,
+    refresh_token: &str,
+    trading_api_token: &str,
+  ) -> EbayClientBuilder {
+    Self::with_http_client(
+      client_id,
+      client_secret,
+      refresh_token,
+      trading_api_token,
+      Client::new(),
+    )
   }
 
   pub fn with_http_client(
     client_id: &str,
     client_secret: &str,
     refresh_token: &str,
+    trading_api_token: &str,
     http: Client,
   ) -> EbayClientBuilder {
     let credential = Credential {
@@ -73,6 +87,7 @@ impl EbayClient {
       credential,
       http,
       refresh_token: refresh_token.to_owned(),
+      trading_api_token: trading_api_token.to_owned(),
       access_token: RwLock::new(None),
       scopes: ALL_SCOPES.iter().cloned().collect(),
     };

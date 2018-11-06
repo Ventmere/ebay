@@ -23,7 +23,7 @@ impl<'a> Refresh<'a> {
   pub fn refresh(&self, client: &Client, refresh_token: &str) -> EbayResult<RefreshResponse> {
     let url = "https://api.ebay.com/identity/v1/oauth2/token";
 
-    #[derive(Serialize)]
+    #[derive(Debug, Serialize)]
     struct Form<'a> {
       grant_type: &'a str,
       refresh_token: &'a str,
@@ -35,13 +35,11 @@ impl<'a> Refresh<'a> {
       .basic_auth(
         &self.credential.client_id as &str,
         Some(&self.credential.client_secret as &str),
-      )
-      .form(&Form {
+      ).form(&Form {
         grant_type: "refresh_token",
         refresh_token,
         scope: self.scopes.join(" "),
-      })
-      .send()?;
+      }).send()?;
 
     check_resp!(resp);
 

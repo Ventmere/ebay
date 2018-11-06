@@ -6,12 +6,13 @@ use result::EbayResult;
 
 pub mod order;
 
-pub use self::order::{shipping_fulfillment::{ShippingFulfillment, ShippingFulfillmentDetails,
-                                             ShippingFulfillmentDetailsBuilder,
-                                             ShippingFulfillmentPagedCollection},
-                      GetOrdersParams,
-                      Order,
-                      OrderSearchPagedCollection};
+pub use self::order::{
+  shipping_fulfillment::{
+    ShippingFulfillment, ShippingFulfillmentDetails, ShippingFulfillmentDetailsBuilder,
+    ShippingFulfillmentPagedCollection,
+  },
+  GetOrdersParams, Order, OrderSearchPagedCollection,
+};
 
 pub trait FulfillmentApi {
   fn get_orders(&self, params: &GetOrdersParams) -> EbayResult<OrderSearchPagedCollection>;
@@ -96,7 +97,7 @@ impl FulfillmentApi for EbayClient {
       .headers()
       .get::<Location>()
       .and_then(|location| location.split('/').last().map(str::to_string))
-      .ok_or_else(|| "Location header was not found")?;
+      .ok_or_else(|| "Location header was not found".to_owned())?;
 
     Ok(location.to_owned())
   }

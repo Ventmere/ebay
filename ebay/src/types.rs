@@ -1,6 +1,7 @@
 use chrono::{DateTime, SecondsFormat, Utc};
 use serde::ser::{Serialize, Serializer};
 
+#[derive(Debug)]
 pub struct EbayDateTime(DateTime<Utc>);
 
 impl EbayDateTime {

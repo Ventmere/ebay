@@ -27,7 +27,7 @@ impl<'a> Exchange<'a> {
   pub fn exchange(&self, client: &Client, code: &str) -> EbayResult<ExchangeResponse> {
     let url = "https://api.ebay.com/identity/v1/oauth2/token";
 
-    #[derive(Serialize)]
+    #[derive(Debug, Serialize)]
     struct Form<'a> {
       grant_type: &'a str,
       code: &'a str,
@@ -39,13 +39,11 @@ impl<'a> Exchange<'a> {
       .basic_auth(
         &self.credential.client_id as &str,
         Some(&self.credential.client_secret as &str),
-      )
-      .form(&Form {
+      ).form(&Form {
         grant_type: "authorization_code",
         code: code.as_ref(),
         redirect_uri: &self.ru_name,
-      })
-      .send()?;
+      }).send()?;
 
     check_resp!(resp);
 

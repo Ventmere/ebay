@@ -2,7 +2,7 @@ use chrono::{DateTime, Utc};
 use serde_json::Value;
 use types::EbayDateTime;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ShippingFulfillment {
   #[serde(rename = "fulfillmentId")]
   pub fulfillment_id: String,
@@ -18,7 +18,7 @@ pub struct ShippingFulfillment {
   pub line_items: Option<Vec<LineItemReference>>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct LineItemReference {
   /// The globally unique eBay-generated identifier of the line item.
   /// Note: A single line item can consist of multiple units of a purchased item,
@@ -30,14 +30,14 @@ pub struct LineItemReference {
   pub line_item_id: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ShippingFulfillmentPagedCollection {
   pub fulfillments: Vec<ShippingFulfillment>,
   pub total: i32,
   pub warnings: Option<Vec<Value>>,
 }
 
-#[derive(Serialize)]
+#[derive(Debug, Serialize)]
 pub struct ShippingFulfillmentDetails {
   #[serde(rename = "trackingNumber")]
   pub tracking_number: Option<String>,

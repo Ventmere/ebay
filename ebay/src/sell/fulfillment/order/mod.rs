@@ -6,7 +6,7 @@ mod types;
 pub use self::types::*;
 pub mod shipping_fulfillment;
 
-#[derive(Serialize, Default)]
+#[derive(Debug, Serialize, Default)]
 pub struct GetOrdersParams {
   pub offset: Option<i32>,
   pub limit: Option<usize>,
@@ -15,13 +15,13 @@ pub struct GetOrdersParams {
   pub order_ids: Option<Vec<String>>,
 }
 
-#[derive(Clone, Copy)]
+#[derive(Debug, Clone, Copy)]
 enum DateRange {
   After(DateTime<Utc>),
   Between(DateTime<Utc>, DateTime<Utc>),
 }
 
-#[derive(Default)]
+#[derive(Debug, Default)]
 pub struct Filter {
   creation_date: Option<DateRange>,
   last_modified_date: Option<DateRange>,

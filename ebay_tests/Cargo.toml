@@ -2,6 +2,7 @@
 name = "ebay_tests"
 version = "0.1.0"
 authors = ["fluxxu <fluxxu@gmail.com>"]
+autotests = false
 
 [dependencies]
 reqwest = "0.8.2"

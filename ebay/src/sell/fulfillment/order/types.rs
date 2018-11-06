@@ -19,7 +19,7 @@ uppercase_str_enum! {
   }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Order {
   #[serde(rename = "orderId")]
   pub order_id: String,
@@ -58,7 +58,7 @@ uppercase_str_enum! {
   }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct CancelStatus {
   #[serde(rename = "cancelRequests")]
   pub cancel_requests: Vec<CancelRequest>,
@@ -68,7 +68,7 @@ pub struct CancelStatus {
   pub cancelled_date: Option<DateTime<Utc>>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct CancelRequest {
   #[serde(rename = "cancelCompletedDate")]
   pub cancel_completed_date: Option<String>,
@@ -82,7 +82,7 @@ pub struct CancelRequest {
   pub cancel_requested_date: Option<String>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PaymentSummary {
   pub payments: Vec<Payment>,
   pub refunds: Vec<OrderRefund>,
@@ -90,7 +90,7 @@ pub struct PaymentSummary {
   pub total_due_seller: Amount,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct OrderRefund {
   pub amount: Amount,
   #[serde(rename = "refundDate")]
@@ -101,7 +101,7 @@ pub struct OrderRefund {
   pub refund_status: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Payment {
   pub amount: Amount,
   #[serde(rename = "paymentDate")]
@@ -114,7 +114,7 @@ pub struct Payment {
   pub payment_status: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PricingSummary {
   pub adjustment: Option<Amount>,
   #[serde(rename = "deliveryDiscount")]
@@ -130,12 +130,12 @@ pub struct PricingSummary {
   pub price_discount_subtotal: Option<Amount>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Buyer {
   pub username: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct FulfillmentStartInstruction {
   #[serde(rename = "ebaySupportedFulfillment")]
   pub ebay_supported_fulfillment: bool,
@@ -149,7 +149,7 @@ pub struct FulfillmentStartInstruction {
   pub shipping_step: Option<ShippingStep>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ShippingStep {
   #[serde(rename = "shipTo")]
   pub ship_to: Contact,
@@ -157,7 +157,7 @@ pub struct ShippingStep {
   pub shipping_service_code: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Contact {
   #[serde(rename = "contactAddress")]
   pub contact_address: Address,
@@ -167,7 +167,7 @@ pub struct Contact {
   pub primary_phone: PhoneNumber,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Address {
   #[serde(rename = "addressLine1")]
   pub address_line1: String,
@@ -182,7 +182,7 @@ pub struct Address {
   pub state_or_province: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PhoneNumber {
   #[serde(rename = "phoneNumber")]
   pub phone_number: Option<String>,
@@ -195,12 +195,12 @@ uppercase_str_enum! {
   }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Tax {
   pub amount: Amount,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct LineItem {
   #[serde(rename = "appliedPromotions")]
   pub applied_promotions: Vec<AppliedPromotion>,
@@ -234,7 +234,7 @@ pub struct LineItem {
   pub total: Amount,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct AppliedPromotion {
   pub description: String,
   #[serde(rename = "discountAmount")]
@@ -243,7 +243,7 @@ pub struct AppliedPromotion {
   pub promotion_id: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct DeliveryCost {
   #[serde(rename = "shippingCost")]
   pub shipping_cost: Amount,
@@ -253,7 +253,7 @@ pub struct DeliveryCost {
   pub shipping_intermediation_fee: Option<Amount>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Amount {
   #[serde(rename = "convertedFromCurrency")]
   pub converted_from_currency: Option<String>,
@@ -263,7 +263,7 @@ pub struct Amount {
   pub value: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct LineItemFulfillmentInstructions {
   #[serde(rename = "guaranteedDelivery")]
   pub guaranteed_delivery: bool,
@@ -275,13 +275,13 @@ pub struct LineItemFulfillmentInstructions {
   pub ship_by_date: Option<DateTime<Utc>>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct LineItemProperties {
   #[serde(rename = "buyerProtection")]
   pub buyer_protection: bool,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct OrderSearchPagedCollection {
   pub href: String,
   pub limit: i32,
