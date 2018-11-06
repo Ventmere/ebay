@@ -47,7 +47,7 @@ pub fn read_ebay_response<T: for<'de> Deserialize<'de>>(resp: &mut Response) -> 
 #[macro_export]
 macro_rules! uppercase_str_enum {
   (pub enum $name:ident { $($v:ident,)+ }) => {
-    #[derive(Debug, Serialize, Deserialize)]
+    #[derive(Serialize, Deserialize, PartialEq, Clone, Copy)]
     #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
     pub enum $name {
       $(
