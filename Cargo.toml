@@ -1,8 +1,10 @@
 [workspace]
 members = [
   "ebay",
+  "ebay_derive",
   "ebay_tests",
   "ebay_cli"
 ]
 [patch.crates-io]
 ebay = { path = "./ebay" }
+ebay_derive = { path = "./ebay_derive" }

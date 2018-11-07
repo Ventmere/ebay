@@ -6,6 +6,7 @@ description = "eBay API client for Rust."
 license = "MIT"
 
 [dependencies]
+ebay_derive = "0.1"
 chrono = { version = "0.4.0", features = ["serde"] }
 reqwest = "0.8.2"
 url = "1.6.0"

@@ -9,6 +9,8 @@ extern crate serde;
 extern crate serde_json;
 extern crate url;
 extern crate xmltree;
+#[macro_use]
+extern crate ebay_derive;
 
 pub mod result;
 #[macro_use]
@@ -16,5 +18,5 @@ mod utils;
 pub mod auth;
 pub mod client;
 pub mod sell;
-// pub mod trading;
+pub mod trading;
 pub mod types;
