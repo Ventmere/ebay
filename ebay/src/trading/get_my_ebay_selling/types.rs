@@ -1,3 +1,11 @@
+use crate::trading::types::PaginationResult;
+
+#[derive(Debug, Serialize, FromXmlElement, Default)]
+pub struct ItemList {
+  pub item_array: Vec<Item>,
+  pub pagination_result: PaginationResult,
+}
+
 #[derive(Debug, Serialize, FromXmlElement, Default)]
 pub struct Item {
   pub buy_it_now_price: Price,

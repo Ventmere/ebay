@@ -18,6 +18,7 @@ lazy_static! {
 
 mod auth;
 mod sell;
+mod trading;
 
 pub struct Env {
   pub host: String,
@@ -26,6 +27,7 @@ pub struct Env {
   pub ru_name: String,
   pub refresh_token: String,
   pub access_token: String,
+  pub trading_api_token: String,
 }
 
 pub fn get_env() -> Env {
@@ -41,6 +43,7 @@ pub fn get_env() -> Env {
     ru_name: var("RU_NAME").unwrap(),
     refresh_token: var("REFRESH_TOKEN").unwrap(),
     access_token: var("ACCESS_TOKEN").unwrap(),
+    trading_api_token: var("TRADING_API_TOKEN").unwrap(),
   }
 }
 
@@ -50,8 +53,10 @@ pub fn get_client() -> EbayClient {
     &env.credential.client_id,
     &env.credential.client_secret,
     &env.refresh_token,
+    &env.trading_api_token,
     HTTP_CLIENT.clone(),
-  ).finalize()
+  )
+  .finalize()
 }
 
 #[cfg(target_os = "macos")]

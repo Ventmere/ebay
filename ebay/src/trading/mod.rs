@@ -8,7 +8,7 @@ const ENDPOINT: &'static str = "https://api.ebay.com/ws/api.dll";
 #[macro_use]
 mod xml_helper;
 mod headers;
-mod types;
+pub mod types;
 
 pub use self::xml_helper::{FromXmlElement, Xml};
 

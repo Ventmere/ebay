@@ -1,6 +1,5 @@
 use ebay::trading::Xml;
-use helpers::{get_client, Method};
-use serde_json::{self, Value};
+use helpers::get_client;
 
 pub fn run() {
   // use std::io::stdout;
@@ -21,15 +20,15 @@ fn run_get_active_listing() {
   let res: Xml<()> = client
     .request_trading_api(
       "GetMyeBaySelling",
-      vec![xml_element!(
-      ActiveList[][
-        Include[][true]
-        Pagination[][
-          EntriesPerPage[][200]
-          PageNumber[][1]
+      vec![xml_element!{
+        ActiveList[][
+          Include[][true]
+          Pagination[][
+            EntriesPerPage[][200]
+            PageNumber[][1]
+          ]
         ]
-      ]
-    )],
+      }],
     )
     .unwrap();
   println!("{}", res.text())

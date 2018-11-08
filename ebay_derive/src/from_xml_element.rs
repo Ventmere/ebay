@@ -5,6 +5,7 @@ use syn::*;
 
 enum FieldFrom {
   ChildElement,
+  ChildElements,
   Attr,
   Text,
 }
@@ -14,6 +15,7 @@ impl FieldFrom {
     match v {
       "text" => FieldFrom::Text,
       "attr" => FieldFrom::Attr,
+      "child_elements" => FieldFrom::ChildElements,
       "child_element" => FieldFrom::ChildElement,
       _ => panic!("invalid `from` attr value '{}'", v),
     }
@@ -73,6 +75,11 @@ pub fn derive(input: TokenStream) -> TokenStream {
               },
               None => Default::default(),
             }
+          }
+        }
+        FieldFrom::ChildElements => {
+          quote_spanned! {name.span() =>
+            #name: crate::trading::xml_helper::FromXmlElement::from_xml_element(&elem)?
           }
         }
         FieldFrom::Attr => {
@@ -185,3 +192,19 @@ fn test_field_name_to_attr_name() {
     assert_eq!(field_name_to_attr_name(pair[0]), pair[1])
   }
 }
+
+// fn is_vec(ty: &Type) -> bool {
+//   if let Type::Path(TypePath {
+//     path: Path { ref segments, .. },
+//     ..
+//   }) = *ty
+//   {
+//     if let Some(ident) = segments.first().map(|pair| pair.value().ident.clone()) {
+//       ident == "Vec"
+//     } else {
+//       false
+//     }
+//   } else {
+//     false
+//   }
+// }

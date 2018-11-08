@@ -34,6 +34,16 @@ impl FromXmlElement for () {
   }
 }
 
+impl<T> FromXmlElement for Vec<T>
+where
+  T: FromXmlElement,
+{
+  fn from_xml_element(elem: &Element) -> EbayResult<Self> {
+    use std::iter::FromIterator;
+    FromIterator::from_iter(elem.children.iter().map(T::from_xml_element))
+  }
+}
+
 pub struct Xml<T> {
   inner: T,
   text: String,
