@@ -46,6 +46,7 @@ where
 
 pub struct Xml<T> {
   inner: T,
+  elem: Element,
   text: String,
 }
 
@@ -73,11 +74,15 @@ where
 
     let inner = T::from_xml_element(&elem)?;
 
-    Ok(Xml { inner, text })
+    Ok(Xml { inner, text, elem })
   }
 
   pub fn text(&self) -> &str {
     self.text.as_ref()
+  }
+
+  pub fn element(&self) -> &Element {
+    &self.elem
   }
 
   pub fn into_inner(self) -> T {
