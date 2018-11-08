@@ -18,5 +18,6 @@ mod utils;
 pub mod auth;
 pub mod client;
 pub mod sell;
+#[macro_use]
 pub mod trading;
 pub mod types;
