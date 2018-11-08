@@ -25,10 +25,10 @@ struct AccessToken {
 }
 
 pub struct EbayClient {
-  http: Client,
+  pub(crate) http: Client,
+  pub(crate) trading_api_token: String,
   credential: Credential,
   refresh_token: String,
-  trading_api_token: String,
   access_token: RwLock<Option<AccessToken>>,
   scopes: Vec<&'static str>,
 }

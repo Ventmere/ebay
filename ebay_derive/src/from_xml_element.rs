@@ -67,7 +67,7 @@ pub fn derive(input: TokenStream) -> TokenStream {
       match from {
         FieldFrom::ChildElement => {
           quote_spanned! {name.span() =>
-            #name: match elem.take_child(#tag_name) {
+            #name: match elem.get_child(#tag_name) {
               Some(elem) => {
                 crate::trading::xml_helper::FromXmlElement::from_xml_element(elem)?
               },
@@ -94,7 +94,7 @@ pub fn derive(input: TokenStream) -> TokenStream {
 
   let output: proc_macro2::TokenStream = quote!{
     impl crate::trading::xml_helper::FromXmlElement for #name {
-      fn from_xml_element(mut elem: ::xmltree::Element) -> crate::result::EbayResult<Self> {
+      fn from_xml_element(mut elem: &::xmltree::Element) -> crate::result::EbayResult<Self> {
         Ok(
           #name {
             #(#lines),*
@@ -105,22 +105,6 @@ pub fn derive(input: TokenStream) -> TokenStream {
   };
 
   output.into()
-}
-
-fn is_vec(ty: &Type) -> bool {
-  if let Type::Path(TypePath {
-    path: Path { ref segments, .. },
-    ..
-  }) = *ty
-  {
-    if let Some(ident) = segments.first().map(|pair| pair.value().ident.clone()) {
-      ident == "Vec"
-    } else {
-      false
-    }
-  } else {
-    false
-  }
 }
 
 const ABBR_WORDS: &'static [&'static str] = &["id", "url", "sku"];

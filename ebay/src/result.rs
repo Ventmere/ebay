@@ -26,6 +26,12 @@ pub enum EbayError {
 
   #[fail(display = "{}", _0)]
   Msg(String),
+
+  #[fail(display = "xml error: {}", _0)]
+  Xml(::xmltree::Error),
+
+  #[fail(display = "utf8 error: {}", _0)]
+  Utf8(::std::str::Utf8Error),
 }
 
 impl EbayError {
@@ -57,3 +63,5 @@ impl_from!(Url(::url::ParseError));
 impl_from!(Http(::reqwest::Error));
 impl_from!(Json(::serde_json::Error));
 impl_from!(Msg(String));
+impl_from!(Xml(::xmltree::Error));
+impl_from!(Utf8(::std::str::Utf8Error));

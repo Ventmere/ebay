@@ -1,25 +1,36 @@
 use reqwest::Response;
 use result::*;
-use std::str::FromStr;
 use xmltree::Element;
 
 pub trait FromXmlElement: Sized + Default {
-  fn from_xml_element(elem: Element) -> EbayResult<Self>;
+  fn from_xml_element(elem: &Element) -> EbayResult<Self>;
 }
 
-impl<T> FromXmlElement for T
-where
-  T: FromStr + Default,
-  T::Err: ::std::fmt::Debug,
-{
-  fn from_xml_element(elem: Element) -> EbayResult<Self> {
+impl FromXmlElement for i64 {
+  fn from_xml_element(elem: &Element) -> EbayResult<Self> {
     let v = match elem.text {
-      Some(text) => text
+      Some(ref text) => text
         .parse()
         .map_err(|err| format!("parse error: {:?}", err))?,
       None => Default::default(),
     };
     Ok(v)
+  }
+}
+
+impl FromXmlElement for String {
+  fn from_xml_element(elem: &Element) -> EbayResult<Self> {
+    let v = match elem.text {
+      Some(ref text) => text.clone(),
+      None => Default::default(),
+    };
+    Ok(v)
+  }
+}
+
+impl FromXmlElement for () {
+  fn from_xml_element(_elem: &Element) -> EbayResult<()> {
+    Ok(())
   }
 }
 
@@ -50,7 +61,7 @@ where
         body: text.clone(),
       })?;
 
-    let inner = T::from_xml_element(elem)?;
+    let inner = T::from_xml_element(&elem)?;
 
     Ok(Xml { inner, text })
   }
@@ -112,7 +123,7 @@ macro_rules! xml_element {
   (
     $tag_name:ident $attrs:tt $children:tt
   ) => {{
-    use xmltree::Element;
+    use $crate::trading::Element;
     let mut elem = Element::new(stringify!($tag_name));
     xml_element!(ATTRS elem, $attrs);
     xml_element!(CHILDREN elem, $children);
