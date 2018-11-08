@@ -99,7 +99,7 @@ impl GetChildText for Element {
 }
 
 #[macro_export]
-macro_rules! xml_element {
+macro_rules! ebay_xml_element {
   (
     ATTRS $e:expr, [
       $($attr_name:ident = $attr_value:expr),*
@@ -117,7 +117,7 @@ macro_rules! xml_element {
   ) => {
     $(
       $e.children.push(
-        xml_element!($tag_name $attrs $children)
+        ebay_xml_element!($tag_name $attrs $children)
       );
     )*
   };
@@ -135,8 +135,8 @@ macro_rules! xml_element {
   ) => {{
     use $crate::trading::Element;
     let mut elem = Element::new(stringify!($tag_name));
-    xml_element!(ATTRS elem, $attrs);
-    xml_element!(CHILDREN elem, $children);
+    ebay_xml_element!(ATTRS elem, $attrs);
+    ebay_xml_element!(CHILDREN elem, $children);
     elem
   }};
 }
@@ -145,7 +145,7 @@ macro_rules! xml_element {
 fn test_xml_element() {
   use std::io::Cursor;
   let a = 1;
-  let elem = xml_element!(
+  let elem = ebay_xml_element!(
     GetMyeBaySellingRequest[xmlns="urn:ebay:apis:eBLBaseComponents"][
       RequesterCredentials[a=a][
         eBayAuthToken[][

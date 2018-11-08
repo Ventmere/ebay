@@ -43,7 +43,7 @@ fn wrap_request_elements(
 ) -> EbayResult<String> {
   use std::io::Cursor;
 
-  let mut elem = xml_element!(
+  let mut elem = ebay_xml_element!(
     Request[xmlns="urn:ebay:apis:eBLBaseComponents"][
       RequesterCredentials[][
         eBayAuthToken[][

@@ -20,7 +20,7 @@ fn run_get_active_listing() {
   let res: Xml<()> = client
     .request_trading_api(
       "GetMyeBaySelling",
-      vec![xml_element!{
+      vec![ebay_xml_element!{
         ActiveList[][
           Include[][true]
           Pagination[][
