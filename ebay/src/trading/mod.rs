@@ -10,7 +10,7 @@ mod xml_helper;
 mod headers;
 pub mod types;
 
-pub use self::xml_helper::{FromXmlElement, Xml};
+pub use self::xml_helper::{FromXmlElement, XmlResponse};
 
 pub mod get_my_ebay_selling;
 
@@ -19,7 +19,7 @@ impl EbayClient {
     &self,
     call_name: &str,
     request_elements: Vec<Element>,
-  ) -> EbayResult<Xml<T>> {
+  ) -> EbayResult<XmlResponse<T>> {
     use self::headers::AddTradingApiHeaders;
     let mut res = self
       .http
@@ -32,7 +32,7 @@ impl EbayClient {
       )?)
       .send()?;
 
-    Xml::from_res(&mut res)
+    XmlResponse::parse(&mut res)
   }
 }
 

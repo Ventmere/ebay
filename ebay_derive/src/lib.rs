@@ -11,7 +11,7 @@ use crate::proc_macro::TokenStream;
 
 mod from_xml_element;
 
-#[proc_macro_derive(FromXmlElement, attributes(from))]
+#[proc_macro_derive(FromXmlElement, attributes(from, tag_name, attr_name))]
 pub fn derive_from_xml_element(input: TokenStream) -> TokenStream {
   from_xml_element::derive(input)
 }

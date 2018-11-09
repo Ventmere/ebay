@@ -1,4 +1,4 @@
-use ebay::trading::Xml;
+use ebay::trading::XmlResponse;
 use helpers::get_client;
 
 pub fn run() {
@@ -17,7 +17,7 @@ pub fn run() {
 
 fn run_get_active_listing() {
   let client = get_client();
-  let res: Xml<()> = client
+  let res: XmlResponse<()> = client
     .request_trading_api(
       "GetMyeBaySelling",
       vec![ebay_xml_element!{

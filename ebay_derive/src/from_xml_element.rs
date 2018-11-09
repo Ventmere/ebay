@@ -42,7 +42,6 @@ pub fn derive(input: TokenStream) -> TokenStream {
     .into_iter()
     .map(|field| {
       let name = field.ident.as_ref().unwrap();
-      let tag_name = field_name_to_tag_name(&name.to_string());
       let attrs: BTreeMap<String, String> = field
         .attrs
         .iter()
@@ -65,7 +64,18 @@ pub fn derive(input: TokenStream) -> TokenStream {
       let from = attrs
         .get("from")
         .map(|v| FieldFrom::parse(v))
-        .unwrap_or_else(|| FieldFrom::ChildElement);
+        .unwrap_or_else(|| {
+          if is_vec(&field.ty) {
+            FieldFrom::ChildElements
+          } else {
+            FieldFrom::ChildElement
+          }
+        });
+
+      let tag_name = attrs
+        .get("tag_name")
+        .cloned()
+        .unwrap_or_else(|| field_name_to_tag_name(&name.to_string()));
       match from {
         FieldFrom::ChildElement => {
           quote_spanned! {name.span() =>
@@ -79,11 +89,21 @@ pub fn derive(input: TokenStream) -> TokenStream {
         }
         FieldFrom::ChildElements => {
           quote_spanned! {name.span() =>
-            #name: crate::trading::xml_helper::FromXmlElement::from_xml_element(&elem)?
+            #name: {
+              let mut wrapper_elem = crate::trading::xml_helper::Element::new(&elem.name);
+              wrapper_elem.children = elem.children.iter()
+                .filter(|elem| elem.name == #tag_name)
+                .cloned()
+                .collect();
+              crate::trading::xml_helper::FromXmlElement::from_xml_element(&wrapper_elem)?
+            }
           }
         }
         FieldFrom::Attr => {
-          let attr_name = field_name_to_attr_name(&name.to_string());
+          let attr_name = attrs
+            .get("attr_name")
+            .cloned()
+            .unwrap_or_else(|| field_name_to_attr_name(&name.to_string()));
           quote_spanned! {field.span() =>
             #name: elem.attributes.get(#attr_name).cloned().unwrap_or_default()
           }
@@ -193,18 +213,18 @@ fn test_field_name_to_attr_name() {
   }
 }
 
-// fn is_vec(ty: &Type) -> bool {
-//   if let Type::Path(TypePath {
-//     path: Path { ref segments, .. },
-//     ..
-//   }) = *ty
-//   {
-//     if let Some(ident) = segments.first().map(|pair| pair.value().ident.clone()) {
-//       ident == "Vec"
-//     } else {
-//       false
-//     }
-//   } else {
-//     false
-//   }
-// }
+fn is_vec(ty: &Type) -> bool {
+  if let Type::Path(TypePath {
+    path: Path { ref segments, .. },
+    ..
+  }) = *ty
+  {
+    if let Some(ident) = segments.first().map(|pair| pair.value().ident.clone()) {
+      ident == "Vec"
+    } else {
+      false
+    }
+  } else {
+    false
+  }
+}

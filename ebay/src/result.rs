@@ -1,4 +1,5 @@
 use reqwest::StatusCode;
+use trading::types::Error as TradingApiError;
 
 #[derive(Fail, Debug)]
 pub enum EbayError {
@@ -32,6 +33,9 @@ pub enum EbayError {
 
   #[fail(display = "utf8 error: {}", _0)]
   Utf8(::std::str::Utf8Error),
+
+  #[fail(display = "trading api response error: {:?}", _0)]
+  TradingApiResponseError(Vec<TradingApiError>),
 }
 
 impl EbayError {

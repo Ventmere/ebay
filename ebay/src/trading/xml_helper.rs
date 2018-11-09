@@ -1,6 +1,7 @@
+use super::types::ResponseMeta;
 use reqwest::Response;
 use result::*;
-use xmltree::Element;
+pub use xmltree::Element;
 
 pub trait FromXmlElement: Sized + Default {
   fn from_xml_element(elem: &Element) -> EbayResult<Self>;
@@ -44,13 +45,14 @@ where
   }
 }
 
-pub struct Xml<T> {
+pub struct XmlResponse<T> {
   inner: T,
+  meta: ResponseMeta,
   elem: Element,
   text: String,
 }
 
-impl<T> ::std::ops::Deref for Xml<T> {
+impl<T> ::std::ops::Deref for XmlResponse<T> {
   type Target = T;
 
   fn deref(&self) -> &Self::Target {
@@ -58,23 +60,58 @@ impl<T> ::std::ops::Deref for Xml<T> {
   }
 }
 
-impl<T> Xml<T>
+impl<T> XmlResponse<T>
 where
   T: FromXmlElement,
 {
-  pub fn from_res(res: &mut Response) -> EbayResult<Self> {
+  pub fn parse(res: &mut Response) -> EbayResult<Self> {
+    let text = res.text()?;
+    Self::parse_string(text)
+  }
+
+  pub fn parse_string(text: String) -> EbayResult<Self> {
     use std::io::Cursor;
 
-    let text = res.text()?;
     let elem =
       Element::parse(Cursor::new(text.as_bytes())).map_err(|err| EbayError::Deserialize {
         msg: format!("parse response xml: {}", err.to_string()),
-        body: text.clone(),
+        body: text.to_string(),
       })?;
+
+    let meta = ResponseMeta::from_xml_element(&elem).map_err(|err| EbayError::Deserialize {
+      msg: format!("parse response meta error: {}", err),
+      body: text.to_string(),
+    })?;
+
+    if meta.ack == "Failure" {
+      use super::types::Error;
+      use std::iter::FromIterator;
+      let errors: Vec<Error> = EbayResult::<_>::from_iter(
+        elem
+          .children
+          .iter()
+          .filter(|elem| elem.name == "Errors")
+          .map(Error::from_xml_element),
+      )
+      .map_err(|err| EbayError::Deserialize {
+        msg: format!("parse errors error: {}", err),
+        body: text.to_string(),
+      })?;
+      return Err(EbayError::TradingApiResponseError(errors));
+    }
 
     let inner = T::from_xml_element(&elem)?;
 
-    Ok(Xml { inner, text, elem })
+    Ok(XmlResponse {
+      inner,
+      text,
+      elem,
+      meta,
+    })
+  }
+
+  pub fn meta(&self) -> &ResponseMeta {
+    &self.meta
   }
 
   pub fn text(&self) -> &str {
