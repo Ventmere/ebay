@@ -1,7 +1,13 @@
 use crate::trading::types::PaginationResult;
 
 #[derive(Debug, Serialize, FromXmlElement, Default)]
+pub struct Response {
+  pub active_list: ItemList,
+}
+
+#[derive(Debug, Serialize, FromXmlElement, Default)]
 pub struct ItemList {
+  #[from = "child_element"]
   pub item_array: Vec<Item>,
   pub pagination_result: PaginationResult,
 }

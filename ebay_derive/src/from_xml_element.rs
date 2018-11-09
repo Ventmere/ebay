@@ -81,7 +81,7 @@ pub fn derive(input: TokenStream) -> TokenStream {
           quote_spanned! {name.span() =>
             #name: match elem.get_child(#tag_name) {
               Some(elem) => {
-                crate::trading::xml_helper::FromXmlElement::from_xml_element(elem)?
+                crate::trading::FromXmlElement::from_xml_element(elem)?
               },
               None => Default::default(),
             }
@@ -90,12 +90,12 @@ pub fn derive(input: TokenStream) -> TokenStream {
         FieldFrom::ChildElements => {
           quote_spanned! {name.span() =>
             #name: {
-              let mut wrapper_elem = crate::trading::xml_helper::Element::new(&elem.name);
+              let mut wrapper_elem = crate::trading::Element::new(&elem.name);
               wrapper_elem.children = elem.children.iter()
                 .filter(|elem| elem.name == #tag_name)
                 .cloned()
                 .collect();
-              crate::trading::xml_helper::FromXmlElement::from_xml_element(&wrapper_elem)?
+              crate::trading::FromXmlElement::from_xml_element(&wrapper_elem)?
             }
           }
         }
@@ -120,8 +120,8 @@ pub fn derive(input: TokenStream) -> TokenStream {
     .collect();
 
   let output: proc_macro2::TokenStream = quote!{
-    impl crate::trading::xml_helper::FromXmlElement for #name {
-      fn from_xml_element(mut elem: &::xmltree::Element) -> crate::result::EbayResult<Self> {
+    impl crate::trading::FromXmlElement for #name {
+      fn from_xml_element(mut elem: &crate::trading::Element) -> crate::result::EbayResult<Self> {
         Ok(
           #name {
             #(#lines),*
