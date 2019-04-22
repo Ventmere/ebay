@@ -38,7 +38,8 @@ pub fn get_client() -> EbayClient {
     &env.credential.client_secret,
     &env.refresh_token,
     &env.trading_api_token,
-  ).finalize()
+  )
+  .finalize()
 }
 
 pub fn dump_json<T: Serialize>(v: T) {

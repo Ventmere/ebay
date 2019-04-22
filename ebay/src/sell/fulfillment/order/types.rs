@@ -155,6 +155,8 @@ pub struct ShippingStep {
   pub ship_to: Contact,
   #[serde(rename = "shippingServiceCode")]
   pub shipping_service_code: String,
+  #[serde(rename = "shipToReferenceId")]
+  pub ship_to_reference_id: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
