@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GetMyeBaySellingResponse xmlns="urn:ebay:apis:eBLBaseComponents">
+  <Timestamp>2018-11-09T20:29:42.688Z</Timestamp>
+  <Ack>Failure</Ack>
+  <Errors>
+    <ShortMessage>Input data is invalid.</ShortMessage>
+    <LongMessage>Input data for tag &lt;ActiveList[2].Include&gt; is invalid or missing. Please check API documentation.</LongMessage>
+    <ErrorCode>37</ErrorCode>
+    <SeverityCode>Error</SeverityCode>
+    <ErrorParameters ParamID="0">
+      <Value>ActiveList[2].Include</Value>
+    </ErrorParameters>
+    <ErrorClassification>RequestError</ErrorClassification>
+  </Errors>
+  <Errors>
+    <ShortMessage>Header &quot;X-EBAY-API-APP-NAME&quot; does not exist.</ShortMessage>
+    <LongMessage>Header &quot;X-EBAY-API-APP-NAME&quot; does not exist.</LongMessage>
+    <ErrorCode>10011</ErrorCode>
+    <SeverityCode>Error</SeverityCode>
+    <ErrorParameters ParamID="0">
+      <Value>X-EBAY-API-APP-NAME</Value>
+    </ErrorParameters>
+    <ErrorClassification>RequestError</ErrorClassification>
+  </Errors>
+  <Errors>
+    <ShortMessage>Header &quot;X-EBAY-API-DEV-NAME&quot; does not exist.</ShortMessage>
+    <LongMessage>Header &quot;X-EBAY-API-DEV-NAME&quot; does not exist.</LongMessage>
+    <ErrorCode>10011</ErrorCode>
+    <SeverityCode>Error</SeverityCode>
+    <ErrorParameters ParamID="0">
+      <Value>X-EBAY-API-DEV-NAME</Value>
+    </ErrorParameters>
+    <ErrorClassification>RequestError</ErrorClassification>
+  </Errors>
+  <Errors>
+    <ShortMessage>Header &quot;X-EBAY-API-CERT-NAME&quot; does not exist.</ShortMessage>
+    <LongMessage>Header &quot;X-EBAY-API-CERT-NAME&quot; does not exist.</LongMessage>
+    <ErrorCode>10011</ErrorCode>
+    <SeverityCode>Error</SeverityCode>
+    <ErrorParameters ParamID="0">
+      <Value>X-EBAY-API-CERT-NAME</Value>
+    </ErrorParameters>
+    <ErrorClassification>RequestError</ErrorClassification>
+  </Errors>
+  <Version>1083</Version>
+  <Build>E1083_CORE_APISELLING_18856597_R1</Build>
+</GetMyeBaySellingResponse>

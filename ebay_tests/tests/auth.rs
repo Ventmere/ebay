@@ -15,6 +15,7 @@ const SCOPES: [&'static str; 10] = [
 ];
 
 #[test]
+#[ignore]
 fn grant() {
   use ebay::auth::Grant;
 
@@ -31,6 +32,7 @@ fn grant() {
 }
 
 #[test]
+#[ignore]
 fn exchange() {
   use ebay::auth::Exchange;
 
@@ -46,6 +48,7 @@ fn exchange() {
 }
 
 #[test]
+#[ignore]
 fn refresh() {
   use ebay::auth::Refresh;
 

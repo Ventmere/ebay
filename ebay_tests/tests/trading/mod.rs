@@ -3,7 +3,7 @@ use ebay::trading::XmlResponse;
 
 #[test]
 fn test_listings_response_from_xml() {
-  let src = include_str!("../../data/listings.xml").to_string();
+  let src = include_str!("./listings.xml").to_string();
   let res = XmlResponse::<Response>::parse_string(src).unwrap();
   println!("{:#?}", res.into_inner())
 }
@@ -11,7 +11,7 @@ fn test_listings_response_from_xml() {
 #[test]
 fn test_response_errors_xml() {
   use ebay::result::EbayError;
-  let src = include_str!("../../data/error.xml").to_string();
+  let src = include_str!("./error.xml").to_string();
   let err = XmlResponse::<()>::parse_string(src).err().unwrap();
   if let EbayError::TradingApiResponseError(errs) = err {
     assert_eq!(format!("{:#?}", errs), r##"[
