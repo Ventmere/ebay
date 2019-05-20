@@ -6,6 +6,8 @@ use serde::Deserialize;
 use std::sync::RwLock;
 use std::time::{Duration, Instant};
 
+pub mod proxy;
+
 pub const ALL_SCOPES: [&'static str; 10] = [
   "https://api.ebay.com/oauth/api_scope",
   "https://api.ebay.com/oauth/api_scope/sell.marketing.readonly",
@@ -19,11 +21,13 @@ pub const ALL_SCOPES: [&'static str; 10] = [
   "https://api.ebay.com/oauth/api_scope/sell.analytics.readonly",
 ];
 
+#[derive(Debug)]
 struct AccessToken {
   token: String,
   expires: Instant,
 }
 
+#[derive(Debug)]
 pub struct EbayClient {
   pub(crate) http: Client,
   pub(crate) trading_api_token: String,
