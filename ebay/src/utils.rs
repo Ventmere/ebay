@@ -20,8 +20,6 @@ macro_rules! check_resp {
 }
 
 pub fn read_ebay_response<T: for<'de> Deserialize<'de>>(resp: &mut Response) -> EbayResult<T> {
-  use result::EbayError;
-
   let body = resp.text()?;
 
   if !resp.status().is_success() {
