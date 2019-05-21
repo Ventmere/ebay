@@ -17,6 +17,7 @@ pub enum EbayHttpMethod {
 pub struct EbayRequest {
   pub method: EbayHttpMethod,
   pub path: String,
+  pub headers: Option<Vec<(String, String)>>,
   pub query: Option<Vec<(String, String)>>,
   pub body: Option<Value>,
 }
@@ -40,6 +41,15 @@ impl EbayClient {
 
     if let Some(ref query) = req.query {
       b.query(query);
+    }
+
+    if let Some(ref headers) = req.headers {
+      use reqwest::header::Headers;
+      let mut add = Headers::new();
+      for &(ref k, ref v) in headers {
+        add.set_raw(k.to_string(), v.to_string());
+      }
+      b.headers(add);
     }
 
     let mut res = if let Some(ref body) = req.body {
