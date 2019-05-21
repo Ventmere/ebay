@@ -46,8 +46,7 @@ impl EbayClient {
       b.json(body).send()?
     } else {
       b.send()?
-    }
-    .error_for_status()?;
+    };
     Ok(EbayResponse {
       headers: res
         .headers()
