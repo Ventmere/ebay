@@ -181,7 +181,7 @@ pub struct Address {
   #[serde(rename = "postalCode")]
   pub postal_code: String,
   #[serde(rename = "stateOrProvince")]
-  pub state_or_province: String,
+  pub state_or_province: Option<String>,
 }
 
 #[derive(Serialize, Deserialize)]
