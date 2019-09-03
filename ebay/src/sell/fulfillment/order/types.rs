@@ -286,9 +286,9 @@ pub struct LineItemProperties {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct OrderSearchPagedCollection {
   pub href: String,
-  pub limit: i32,
+  pub limit: Option<i32>,
   pub next: Option<String>,
-  pub offset: i32,
+  pub offset: Option<i32>,
   pub orders: Vec<Order>,
   pub prev: Option<String>,
   pub total: i32,
