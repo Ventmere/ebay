@@ -85,7 +85,7 @@ impl Filter {
     Self {
       creation_date: self.creation_date,
       last_modified_date: self.last_modified_date,
-      order_fulfillment_status: Some("{NOT_STARTED|IN_PROGRESS}"),
+      order_fulfillment_status: Some("{FULFILLED|IN_PROGRESS}"),
     }
   }
 }
