@@ -31,11 +31,12 @@ pub trait FulfillmentApi {
 
 impl FulfillmentApi for EbayClient {
   fn get_orders(&self, params: &GetOrdersParams) -> EbayResult<OrderSearchPagedCollection> {
-    self
-      .request(Method::Get, "/sell/fulfillment/v1/order")?
-      .query(params)
-      .send()?
-      .get_response()
+    let mut b = self.request(Method::Get, "/sell/fulfillment/v1/order")?;
+    b.query(params);
+    if let Some(ref ids) = params.order_ids {
+      b.query(&[("orderIds", ids.join(",") as String)]);
+    }
+    b.send()?.get_response()
   }
 
   fn get_order(&self, id: &str) -> EbayResult<Order> {

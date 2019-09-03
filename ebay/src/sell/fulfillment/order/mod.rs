@@ -11,7 +11,7 @@ pub struct GetOrdersParams {
   pub offset: Option<i32>,
   pub limit: Option<usize>,
   pub filter: Option<Filter>,
-  #[serde(rename = "orderIds")]
+  #[serde(skip_serializing)]
   pub order_ids: Option<Vec<String>>,
 }
 
