@@ -277,8 +277,9 @@ pub struct LineItemFulfillmentInstructions {
   pub ship_by_date: Option<DateTime<Utc>>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct LineItemProperties {
+  #[serde(default)]
   #[serde(rename = "buyerProtection")]
   pub buyer_protection: bool,
 }
