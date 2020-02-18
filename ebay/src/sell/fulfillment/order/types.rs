@@ -94,7 +94,7 @@ pub struct PaymentSummary {
 pub struct OrderRefund {
   pub amount: Amount,
   #[serde(rename = "refundDate")]
-  pub refund_date: DateTime<Utc>,
+  pub refund_date: Option<DateTime<Utc>>,
   #[serde(rename = "refundReferenceId")]
   pub refund_reference_id: String,
   #[serde(rename = "refundStatus")]
