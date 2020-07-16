@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 #[derive(Debug, Serialize, Deserialize)]
 pub struct InventoryItems {
   pub href: Option<String>,
-  pub limit: String,
+  pub limit: Option<String>,
   #[serde(rename = "inventoryItems")]
   pub inventory_items: Vec<InventoryItemWithSkuLocaleGroupid>,
   pub next: String,

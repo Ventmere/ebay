@@ -7,6 +7,12 @@ pub trait FromXmlElement: Sized + Default {
   fn from_xml_element(elem: &Element) -> EbayResult<Self>;
 }
 
+impl FromXmlElement for Option<Element> {
+  fn from_xml_element(elem: &Element) -> EbayResult<Self> {
+    Ok(Some(elem.clone()))
+  }
+}
+
 impl FromXmlElement for i64 {
   fn from_xml_element(elem: &Element) -> EbayResult<Self> {
     let v = match elem.text {
@@ -199,5 +205,8 @@ fn test_xml_element() {
   let mut buf: Cursor<Vec<u8>> = Cursor::new(vec![]);
   elem.write(&mut buf).unwrap();
   let xml_text = String::from_utf8(buf.into_inner()).unwrap();
-  assert_eq!(xml_text, r##"<?xml version="1.0" encoding="UTF-8"?><GetMyeBaySellingRequest xmlns="urn:ebay:apis:eBLBaseComponents"><RequesterCredentials a="1"><eBayAuthToken>AUTH_TOKEN</eBayAuthToken></RequesterCredentials></GetMyeBaySellingRequest>"##);
+  assert_eq!(
+    xml_text,
+    r##"<?xml version="1.0" encoding="UTF-8"?><GetMyeBaySellingRequest xmlns="urn:ebay:apis:eBLBaseComponents"><RequesterCredentials a="1"><eBayAuthToken>AUTH_TOKEN</eBayAuthToken></RequesterCredentials></GetMyeBaySellingRequest>"##
+  );
 }

@@ -10,6 +10,7 @@ extern crate clap;
 mod helpers;
 mod sell;
 mod test;
+mod trading;
 
 macro_rules! dispatch {
   ($matches:expr => $head:tt $($rest:tt)*) => {
@@ -32,6 +33,7 @@ macro_rules! dispatch {
 
 fn main() {
   let matches = clap_app!(myapp =>
+    (@arg ENV: -e --env +takes_value "Sets the env file to use")
     (@subcommand test => )
     (@subcommand order =>
       (about: "Manage orders")
@@ -71,7 +73,18 @@ fn main() {
         (@arg SKU: +required "eBay SKU")
       )
     )
+    (@subcommand trading_api =>
+      (@subcommand get_my_ebay_selling =>
+      )
+    )
   ).get_matches();
+
+  if let Some(c) = matches.value_of("ENV") {
+    dotenv::from_filename(c).unwrap();
+    println!("using env file: {}", c);
+  } else {
+    dotenv::dotenv().unwrap();
+  }
 
   dispatch! {
     matches =>
@@ -158,6 +171,13 @@ fn main() {
           (|m| {
             let ids: Vec<_> = m.values_of("LISTING_IDS").expect("No listing ids (-i)").collect();
             sell::inventory::bulk_migrate_listing(&ids);
+          })
+        )
+      )
+      (trading_api =>
+        (get_my_ebay_selling =>
+          (|_| {
+            trading::get_my_ebay_selling()
           })
         )
       )

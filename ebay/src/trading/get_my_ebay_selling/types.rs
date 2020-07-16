@@ -32,6 +32,16 @@ pub struct Item {
   pub new_lead_count: String,
   pub classified_ad_pay_per_lead_fee: Price,
   pub seller_profiles: SellerProfiles,
+  #[from = "child_element"]
+  pub variations: Vec<Variation>,
+}
+
+#[derive(Debug, Serialize, FromXmlElement, Default)]
+pub struct Variation {
+  pub sku: String,
+  pub start_price: Price,
+  pub quantity: i64,
+  pub variation_title: String,
 }
 
 #[derive(Debug, Serialize, FromXmlElement, Default)]

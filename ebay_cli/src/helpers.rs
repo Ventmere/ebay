@@ -16,7 +16,6 @@ struct Env {
 
 fn get_env() -> Env {
   use std::env::var;
-  ::dotenv::dotenv().unwrap();
   Env {
     host: var("HOST").unwrap(),
     credential: Credential {
