@@ -137,6 +137,7 @@ pub struct Buyer {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct FulfillmentStartInstruction {
+  #[serde(default)]
   #[serde(rename = "ebaySupportedFulfillment")]
   pub ebay_supported_fulfillment: bool,
   #[serde(rename = "fulfillmentInstructionsType")]
@@ -167,6 +168,8 @@ pub struct Contact {
   pub full_name: String,
   #[serde(rename = "primaryPhone")]
   pub primary_phone: PhoneNumber,
+  #[serde(default)]
+  pub email: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

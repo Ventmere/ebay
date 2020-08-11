@@ -114,7 +114,7 @@ impl EbayClient {
     };
 
     let mut lock = self.access_token.write().unwrap();
-    ::std::mem::replace(&mut lock as &mut Option<AccessToken>, Some(token));
+    *lock = Some(token);
 
     Ok(value)
   }
