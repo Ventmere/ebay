@@ -87,7 +87,7 @@ pub struct PaymentSummary {
   pub payments: Vec<Payment>,
   pub refunds: Vec<OrderRefund>,
   #[serde(rename = "totalDueSeller")]
-  pub total_due_seller: Amount,
+  pub total_due_seller: Option<Amount>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
