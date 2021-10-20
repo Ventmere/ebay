@@ -1,8 +1,8 @@
 //! Fulfillment API
 //! [Doc](https://developer.ebay.com/api-docs/sell/inventory/overview.html)
 
-use client::*;
-use result::EbayResult;
+use crate::client::*;
+use crate::result::EbayResult;
 
 pub mod inventory_item;
 pub mod listing;
@@ -27,7 +27,7 @@ pub trait InventoryApi {
 impl InventoryApi for EbayClient {
   fn get_inventory_locations(&self, params: &GetLocationParams) -> EbayResult<LocationResponse> {
     self
-      .request(Method::Get, "/sell/inventory/v1/location")?
+      .request(Method::GET, "/sell/inventory/v1/location")?
       .query(params)
       .send()?
       .get_response()
@@ -35,7 +35,7 @@ impl InventoryApi for EbayClient {
 
   fn get_inventory_items(&self, params: &GetInventoryItemsParams) -> EbayResult<InventoryItems> {
     self
-      .request(Method::Get, "/sell/inventory/v1/inventory_item")?
+      .request(Method::GET, "/sell/inventory/v1/inventory_item")?
       .query(params)
       .send()?
       .get_response()
@@ -43,7 +43,7 @@ impl InventoryApi for EbayClient {
 
   fn get_offers(&self, params: &GetOfferParams) -> EbayResult<Offers> {
     self
-      .request(Method::Get, "/sell/inventory/v1/offer")?
+      .request(Method::GET, "/sell/inventory/v1/offer")?
       .query(params)
       .send()?
       .get_response()
@@ -54,7 +54,7 @@ impl InventoryApi for EbayClient {
     params: &BulkMigrateListing,
   ) -> EbayResult<BulkMigrateListingResponse> {
     self
-      .request(Method::Post, "/sell/inventory/v1/bulk_migrate_listing")?
+      .request(Method::POST, "/sell/inventory/v1/bulk_migrate_listing")?
       .json(params)
       .send()?
       .get_response()

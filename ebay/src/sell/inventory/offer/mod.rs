@@ -1,6 +1,7 @@
 mod types;
 
 pub use self::types::*;
+use serde::{Serialize};
 
 #[derive(Debug, Serialize, Default)]
 pub struct GetOfferParams {

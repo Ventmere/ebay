@@ -1,5 +1,6 @@
 use chrono::{DateTime, Utc};
 use serde_json::Value;
+use serde::{Serialize, Deserialize};
 
 uppercase_str_enum! {
   pub enum OrderFulfillmentStatus {

@@ -1,6 +1,6 @@
 use super::types::ResponseMeta;
-use reqwest::Response;
-use result::*;
+use reqwest::blocking::Response;
+use crate::result::*;
 pub use xmltree::Element;
 
 pub trait FromXmlElement: Sized + Default {
@@ -18,7 +18,7 @@ impl FromXmlElement for i64 {
     let v = match elem.text {
       Some(ref text) => text
         .parse()
-        .map_err(|err| format!("parse error: {:?}", err))?,
+        .map_err(|err| EbayError::Msg(format!("parse error: {:?}", err)))?,
       None => Default::default(),
     };
     Ok(v)
@@ -70,7 +70,7 @@ impl<T> XmlResponse<T>
 where
   T: FromXmlElement,
 {
-  pub fn parse(res: &mut Response) -> EbayResult<Self> {
+  pub fn parse(res: Response) -> EbayResult<Self> {
     let text = res.text()?;
     Self::parse_string(text)
   }

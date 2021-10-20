@@ -1,4 +1,5 @@
 use crate::trading::types::PaginationResult;
+use serde::{Serialize};
 
 #[derive(Debug, Serialize, FromXmlElement, Default)]
 pub struct Response {

@@ -2,9 +2,10 @@
 //! [Doc](https://developer.ebay.com/api-docs/static/oauth-refresh-token-request.html)
 
 use super::Credential;
-use reqwest::Client;
-use result::EbayResult;
-use utils::read_ebay_response;
+use reqwest::blocking::Client;
+use crate::result::EbayResult;
+use crate::utils::read_ebay_response;
+use serde::{Serialize, Deserialize};
 
 #[derive(Debug)]
 pub struct Refresh<'a> {
@@ -30,7 +31,7 @@ impl<'a> Refresh<'a> {
       scope: String,
     }
 
-    let mut resp = client
+    let resp = client
       .post(url)
       .basic_auth(
         &self.credential.client_id as &str,
@@ -41,9 +42,7 @@ impl<'a> Refresh<'a> {
         scope: self.scopes.join(" "),
       }).send()?;
 
-    check_resp!(resp);
-
-    let resp = read_ebay_response(&mut resp)?;
+    let resp = read_ebay_response(resp)?;
 
     Ok(resp)
   }

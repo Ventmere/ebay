@@ -1,3 +1,5 @@
+use serde::{Serialize, Deserialize};
+
 #[derive(Debug, Serialize)]
 pub struct MigrateListing {
   #[serde(rename = "listingId")]

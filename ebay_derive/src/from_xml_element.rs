@@ -111,7 +111,7 @@ pub fn derive(input: TokenStream) -> TokenStream {
         FieldFrom::Text => {
           quote_spanned! {field.span() =>
             #name: elem.text.clone().unwrap_or_default().parse().map_err(|err| {
-              format!("parse field error: {:?}", err)
+              crate::result::EbayError::Msg(format!("parse field error: {:?}", err))
             })?,
           }
         }

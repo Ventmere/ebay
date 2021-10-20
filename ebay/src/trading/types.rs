@@ -1,3 +1,5 @@
+use serde::{Serialize};
+
 #[derive(Debug, Default, Serialize, FromXmlElement)]
 pub struct PaginationResult {
   pub total_number_of_pages: i64,

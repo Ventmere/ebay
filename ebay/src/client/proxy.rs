@@ -3,6 +3,7 @@ use crate::result::EbayResult;
 use reqwest::Method;
 use serde_json::Value;
 use std::collections::HashMap;
+use serde::{Serialize, Deserialize};
 
 #[derive(Debug, Copy, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -32,27 +33,27 @@ pub struct EbayResponse {
 impl EbayClient {
   pub fn proxy_request(&self, req: &EbayRequest) -> EbayResult<EbayResponse> {
     let method = match req.method {
-      EbayHttpMethod::Get => Method::Get,
-      EbayHttpMethod::Post => Method::Post,
-      EbayHttpMethod::Put => Method::Put,
-      EbayHttpMethod::Delete => Method::Delete,
+      EbayHttpMethod::Get => Method::GET,
+      EbayHttpMethod::Post => Method::POST,
+      EbayHttpMethod::Put => Method::PUT,
+      EbayHttpMethod::Delete => Method::DELETE,
     };
     let mut b = self.request(method, &req.path)?;
 
     if let Some(ref query) = req.query {
-      b.query(query);
+      b = b.query(query);
     }
 
     if let Some(ref headers) = req.headers {
-      use reqwest::header::Headers;
-      let mut add = Headers::new();
+      use reqwest::header::{HeaderMap, HeaderName, HeaderValue};
+      let mut add = HeaderMap::new();
       for &(ref k, ref v) in headers {
-        add.set_raw(k.to_string(), v.to_string());
+        add.insert(HeaderName::from_bytes(k.as_bytes())?, HeaderValue::from_str(v)?);
       }
-      b.headers(add);
+      b = b.headers(add);
     }
 
-    let mut res = if let Some(ref body) = req.body {
+    let res = if let Some(ref body) = req.body {
       b.json(body).send()?
     } else {
       b.send()?
@@ -61,7 +62,12 @@ impl EbayClient {
       headers: res
         .headers()
         .iter()
-        .map(|view| (view.name().to_string(), view.value_string()))
+        .map(|(name, value)| {
+          (
+            name.to_string(),
+            value.to_str().map(ToOwned::to_owned).unwrap_or_default(),
+          )
+        })
         .collect(),
       status_code: res.status().as_u16(),
       body: res.json().ok(),

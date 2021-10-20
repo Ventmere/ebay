@@ -1,5 +1,6 @@
 use chrono::{DateTime, SecondsFormat, Utc};
-use serde::ser::{Serialize, Serializer};
+use serde::ser::{Serializer};
+use serde::{Serialize};
 
 mod types;
 

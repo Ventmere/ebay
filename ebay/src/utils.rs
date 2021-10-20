@@ -1,5 +1,5 @@
-use reqwest::Response;
-use result::*;
+use reqwest::blocking::Response;
+use crate::result::*;
 use serde::Deserialize;
 use serde_json;
 
@@ -7,7 +7,7 @@ use serde_json;
 #[macro_export]
 macro_rules! check_resp {
   ($resp:expr) => {{
-    use result::EbayError;
+    use crate::result::EbayError;
     if !$resp.status().is_success() {
       let body = $resp.text()?;
       return Err(EbayError::Request {
@@ -19,13 +19,15 @@ macro_rules! check_resp {
   }};
 }
 
-pub fn read_ebay_response<T: for<'de> Deserialize<'de>>(resp: &mut Response) -> EbayResult<T> {
+pub fn read_ebay_response<T: for<'de> Deserialize<'de>>(resp: Response) -> EbayResult<T> {
+  let status = resp.status();
+  let path = resp.url().to_string();
   let body = resp.text()?;
 
-  if !resp.status().is_success() {
+  if !status.is_success() {
     return Err(EbayError::Request {
-      path: resp.url().to_string(),
-      status: resp.status(),
+      path,
+      status: status,
       body,
     });
   }

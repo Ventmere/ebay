@@ -1,41 +1,45 @@
 use reqwest::StatusCode;
-use trading::types::Error as TradingApiError;
+use crate::trading::types::Error as TradingApiError;
+use thiserror::Error;
 
-#[derive(Fail, Debug)]
+#[derive(Error, Debug)]
 pub enum EbayError {
-  #[fail(
-    display = "request error: path = '{}', status = '{}', body = '{}'",
-    path, status, body
-  )]
+  #[error("request error: path = '{path}', status = '{status}', body = '{body}'")]
   Request {
     path: String,
     status: StatusCode,
     body: String,
   },
 
-  #[fail(display = "deserialize body error: msg = '{}', body = '{}'", msg, body)]
+  #[error("deserialize body error: msg = '{msg}', body = '{body}'")]
   Deserialize { msg: String, body: String },
 
-  #[fail(display = "url error: {}", _0)]
-  Url(::url::ParseError),
+  #[error("url error: {0}")]
+  Url(#[from] url::ParseError),
 
-  #[fail(display = "http error: {}", _0)]
-  Http(::reqwest::Error),
+  #[error("http error: {0}")]
+  Http(#[from] reqwest::Error),
 
-  #[fail(display = "json error: {}", _0)]
-  Json(::serde_json::Error),
+  #[error("json error: {0}")]
+  Json(#[from] serde_json::Error),
 
-  #[fail(display = "{}", _0)]
+  #[error("{0}")]
   Msg(String),
 
-  #[fail(display = "xml error: {}", _0)]
-  Xml(::xmltree::Error),
+  #[error("xml error: {0}")]
+  Xml(#[from] xmltree::Error),
 
-  #[fail(display = "utf8 error: {}", _0)]
-  Utf8(::std::str::Utf8Error),
+  #[error("utf8 error: {0}")]
+  Utf8(#[from] std::str::Utf8Error),
 
-  #[fail(display = "trading api response error: {:?}", _0)]
+  #[error("trading api response error: {0:?}")]
   TradingApiResponseError(Vec<TradingApiError>),
+
+  #[error("invalid header value: {0:?}")]
+  InvalidHeaderValue(#[from] reqwest::header::InvalidHeaderValue),
+
+  #[error("invalid header name: {0:?}")]
+  InvalidHeaderName(#[from] reqwest::header::InvalidHeaderName),
 }
 
 impl EbayError {
@@ -52,20 +56,3 @@ impl EbayError {
 }
 
 pub type EbayResult<T> = ::std::result::Result<T, EbayError>;
-
-macro_rules! impl_from {
-  ($v:ident($t:ty)) => {
-    impl From<$t> for EbayError {
-      fn from(e: $t) -> Self {
-        EbayError::$v(e)
-      }
-    }
-  };
-}
-
-impl_from!(Url(::url::ParseError));
-impl_from!(Http(::reqwest::Error));
-impl_from!(Json(::serde_json::Error));
-impl_from!(Msg(String));
-impl_from!(Xml(::xmltree::Error));
-impl_from!(Utf8(::std::str::Utf8Error));

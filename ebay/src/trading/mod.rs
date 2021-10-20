@@ -1,6 +1,6 @@
-use client::EbayClient;
+use crate::client::EbayClient;
 use reqwest::Method;
-use result::*;
+use crate::result::*;
 pub use xmltree::Element;
 
 const ENDPOINT: &'static str = "https://api.ebay.com/ws/api.dll";
@@ -21,9 +21,9 @@ impl EbayClient {
     request_elements: Vec<Element>,
   ) -> EbayResult<XmlResponse<T>> {
     use self::headers::AddTradingApiHeaders;
-    let mut res = self
+    let res = self
       .http
-      .request(Method::Post, ENDPOINT)
+      .request(Method::POST, ENDPOINT)
       .add_trading_api_headers(call_name)
       .body(wrap_request_elements(
         call_name,
@@ -32,7 +32,7 @@ impl EbayClient {
       )?)
       .send()?;
 
-    XmlResponse::parse(&mut res)
+    XmlResponse::parse(res)
   }
 }
 

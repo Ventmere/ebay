@@ -1,7 +1,7 @@
-use auth::Credential;
+use crate::auth::Credential;
 pub use reqwest::Method;
-use reqwest::{Client, RequestBuilder, Response};
-use result::EbayResult;
+use reqwest::blocking::{Client, RequestBuilder, Response};
+use crate::result::EbayResult;
 use serde::Deserialize;
 use std::sync::RwLock;
 use std::time::{Duration, Instant};
@@ -100,7 +100,7 @@ impl EbayClient {
   }
 
   fn refresh_access_token(&self) -> EbayResult<String> {
-    use auth::Refresh;
+    use crate::auth::Refresh;
     let r = Refresh {
       credential: &self.credential,
       scopes: &self.scopes,
@@ -141,23 +141,22 @@ impl EbayClient {
   }
 
   pub fn request(&self, method: Method, path: &str) -> EbayResult<RequestBuilder> {
-    use reqwest::header::{Authorization, Bearer};
+    use reqwest::header::{AUTHORIZATION, HeaderValue};
     let mut b = self
       .http
       .request(method, &format!("https://api.ebay.com{}", path));
-    b.header(Authorization(Bearer {
-      token: self.get_access_token()?,
-    }));
+    let value = HeaderValue::from_str(&format!("Bearer {}", self.get_access_token()?))?;
+    b = b.header(AUTHORIZATION, value);
     Ok(b)
   }
 }
 
 pub trait EbayResponse {
-  fn get_response<T: for<'de> Deserialize<'de>>(&mut self) -> EbayResult<T>;
+  fn get_response<T: for<'de> Deserialize<'de>>(self) -> EbayResult<T>;
 }
 
 impl EbayResponse for Response {
-  fn get_response<T: for<'de> Deserialize<'de>>(&mut self) -> EbayResult<T> {
-    ::utils::read_ebay_response(self)
+  fn get_response<T: for<'de> Deserialize<'de>>(self) -> EbayResult<T> {
+    crate::utils::read_ebay_response(self)
   }
 }

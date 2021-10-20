@@ -2,7 +2,7 @@
 //! [Doc](https://developer.ebay.com/api-docs/static/oauth-permissions-grant-request.html)
 
 use super::Credential;
-use result::EbayResult;
+use crate::result::EbayResult;
 
 #[derive(Debug)]
 pub struct GrantUrl {

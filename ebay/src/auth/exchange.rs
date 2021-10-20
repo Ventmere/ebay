@@ -2,9 +2,10 @@
 //! [Doc](https://developer.ebay.com/api-docs/static/oauth-auth-code-grant-request.html)
 
 use super::Credential;
-use reqwest::Client;
-use result::EbayResult;
-use utils::read_ebay_response;
+use reqwest::blocking::Client;
+use crate::result::EbayResult;
+use crate::utils::read_ebay_response;
+use serde::{Serialize, Deserialize};
 
 #[derive(Debug)]
 pub struct Exchange<'a> {
@@ -34,7 +35,7 @@ impl<'a> Exchange<'a> {
       redirect_uri: &'a str,
     }
 
-    let mut resp = client
+    let resp = client
       .post(url)
       .basic_auth(
         &self.credential.client_id as &str,
@@ -45,9 +46,7 @@ impl<'a> Exchange<'a> {
         redirect_uri: &self.ru_name,
       }).send()?;
 
-    check_resp!(resp);
-
-    let resp = read_ebay_response(&mut resp)?;
+    let resp = read_ebay_response(resp)?;
 
     Ok(resp)
   }
