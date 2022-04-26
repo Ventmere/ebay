@@ -10,3 +10,4 @@ pub mod sell;
 #[macro_use]
 pub mod trading;
 pub mod types;
+pub mod notification;
