@@ -175,7 +175,7 @@ pub struct Contact {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Address {
   #[serde(rename = "addressLine1")]
-  pub address_line1: String,
+  pub address_line1: Option<String>,
   #[serde(rename = "addressLine2")]
   pub address_line2: Option<String>,
   pub city: String,
