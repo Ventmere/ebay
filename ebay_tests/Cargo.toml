@@ -5,10 +5,10 @@ authors = ["fluxxu <fluxxu@gmail.com>"]
 autotests = false
 
 [dependencies]
-reqwest = "0.8.2"
+reqwest = "0.11"
 dotenv = "0.10.1"
 lazy_static = "1.0.0"
-ebay = "0.2.0"
+ebay = "0.3.0"
 serde_json = "1.0"
 serde = "1.0"
 serde_derive = "1.0"
