@@ -76,6 +76,13 @@ fn main() {
     (@subcommand trading_api =>
       (@subcommand get_my_ebay_selling =>
       )
+      (@subcommand get_item_quantity =>
+        (@arg ITEM_ID: +required "eBay Item ID")
+      )
+      (@subcommand set_item_quantity =>
+        (@arg ITEM_ID: +required "eBay Item ID")
+        (@arg QUANTITY: +required "Quantity")
+      )
     )
   ).get_matches();
 
@@ -178,6 +185,21 @@ fn main() {
         (get_my_ebay_selling =>
           (|_| {
             trading::get_my_ebay_selling()
+          })
+        )
+
+        (get_item_quantity => 
+          (|m| {
+            let item_id = m.value_of("ITEM_ID").unwrap();
+            trading::get_item_quantity_by_item_id(&item_id)
+          })
+        )
+
+        (set_item_quantity => 
+          (|m| {
+            let item_id = m.value_of("ITEM_ID").unwrap();
+            let quantity: i32 = m.value_of("QUANTITY").unwrap().parse().unwrap();
+            trading::set_item_quantity_by_item_id(&item_id, quantity)
           })
         )
       )
