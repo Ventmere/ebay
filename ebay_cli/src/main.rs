@@ -83,6 +83,11 @@ fn main() {
         (@arg ITEM_ID: +required "eBay Item ID")
         (@arg QUANTITY: +required "Quantity")
       )
+      (@subcommand set_mv_item_quantity =>
+        (@arg ITEM_ID: +required "eBay Item ID")
+        (@arg SKU: +required "SKU")
+        (@arg QUANTITY: +required "Quantity")
+      )
     )
   ).get_matches();
 
@@ -200,6 +205,15 @@ fn main() {
             let item_id = m.value_of("ITEM_ID").unwrap();
             let quantity: i32 = m.value_of("QUANTITY").unwrap().parse().unwrap();
             trading::set_item_quantity_by_item_id(&item_id, quantity)
+          })
+        )
+
+        (set_mv_item_quantity => 
+          (|m| {
+            let item_id = m.value_of("ITEM_ID").unwrap();
+            let sku = m.value_of("SKU").unwrap();
+            let quantity: i32 = m.value_of("QUANTITY").unwrap().parse().unwrap();
+            trading::set_mv_item_quantity_by_item_id(&item_id, &sku, quantity)
           })
         )
       )

@@ -31,7 +31,7 @@ pub fn get_item_quantity_by_item_id(item_id: &str) {
     .into_inner();
   if let Some(elem) = res {
     println!("{:?}", elem.get_child("Item").unwrap().get_child("Quantity").unwrap().text);
-    // elem.write(stdout()).unwrap();
+    elem.write(stdout()).unwrap();
   }
 }
 
@@ -39,6 +39,20 @@ pub fn set_item_quantity_by_item_id(item_id: &str, quantity: i32) {
   let elem = ebay_xml_element![
     InventoryStatus[][
       ItemID[][item_id]
+      Quantity[][quantity]
+    ]
+  ];
+  elem.write(std::io::stdout()).unwrap();
+  get_client()
+    .request_trading_api::<Option<Element>>("ReviseInventoryStatus", vec![elem])
+    .unwrap();
+}
+
+pub fn set_mv_item_quantity_by_item_id(item_id: &str, sku: &str, quantity: i32) {
+  let elem = ebay_xml_element![
+    InventoryStatus[][
+      ItemID[][item_id]
+      SKU[][sku]
       Quantity[][quantity]
     ]
   ];
