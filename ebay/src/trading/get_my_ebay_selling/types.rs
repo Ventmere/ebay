@@ -42,6 +42,7 @@ pub struct Variation {
   pub sku: String,
   pub start_price: Price,
   pub quantity: i64,
+  pub quantity_available: i64,
   pub variation_title: String,
 }
 
