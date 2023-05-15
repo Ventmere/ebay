@@ -166,6 +166,7 @@ pub struct Contact {
   #[serde(rename = "contactAddress")]
   pub contact_address: Address,
   #[serde(rename = "fullName")]
+  #[serde(default)]
   pub full_name: String,
   #[serde(rename = "primaryPhone")]
   pub primary_phone: PhoneNumber,
