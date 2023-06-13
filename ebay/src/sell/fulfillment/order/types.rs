@@ -169,6 +169,7 @@ pub struct Contact {
   #[serde(default)]
   pub full_name: String,
   #[serde(rename = "primaryPhone")]
+  #[serde(default)]
   pub primary_phone: PhoneNumber,
   #[serde(default)]
   pub email: String,
@@ -190,7 +191,7 @@ pub struct Address {
   pub state_or_province: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct PhoneNumber {
   #[serde(rename = "phoneNumber")]
   pub phone_number: Option<String>,
