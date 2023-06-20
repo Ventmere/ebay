@@ -181,6 +181,7 @@ pub struct Address {
   pub address_line1: Option<String>,
   #[serde(rename = "addressLine2")]
   pub address_line2: Option<String>,
+  #[serde(default)]
   pub city: String,
   #[serde(rename = "countryCode")]
   pub country_code: String,
