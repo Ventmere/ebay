@@ -42,8 +42,8 @@ pub struct Variation {
   pub sku: String,
   pub start_price: Price,
   pub quantity: i64,
-  pub quantity_available: i64,
   pub variation_title: String,
+  pub selling_status: VariantSellingStatus,
 }
 
 #[derive(Debug, Serialize, FromXmlElement, Default)]
@@ -94,6 +94,12 @@ pub struct SellerShippingProfile {
 #[derive(Debug, Serialize, FromXmlElement, Default)]
 pub struct SellingStatus {
   pub current_price: Price,
+  pub quantity_sold: i64,
+}
+
+#[derive(Debug, Serialize, FromXmlElement, Default)]
+pub struct VariantSellingStatus {
+  pub quantity_sold: i64,
 }
 
 #[derive(Debug, Serialize, FromXmlElement, Default)]
