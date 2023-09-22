@@ -184,6 +184,7 @@ pub struct Address {
   #[serde(default)]
   pub city: String,
   #[serde(rename = "countryCode")]
+  #[serde(default)]
   pub country_code: String,
   #[serde(rename = "postalCode")]
   #[serde(default)]
