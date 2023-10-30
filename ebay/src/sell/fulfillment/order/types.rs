@@ -49,6 +49,48 @@ pub struct Order {
   pub line_items: Vec<LineItem>,
   #[serde(rename = "cancelStatus")]
   pub cancel_status: CancelStatus,
+  pub program: Option<Program>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct AuthenticityVerification {
+    pub outcome_reason: Option<String>,
+    pub status: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct EbayInternationalShipping {
+    pub returns_managed_by: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct EbayShipping {
+    pub shipping_label_provided_by: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct EbayVault {
+    pub fulfillment_type: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct FulfillmentProgram {
+    pub fulfilled_by: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Program {
+    pub authenticity_verification: Option<AuthenticityVerification>,
+    pub ebay_shipping: Option<EbayShipping>,
+    pub ebay_vault: Option<EbayVault>,
+    pub ebay_international_shipping: Option<EbayInternationalShipping>,
+    pub fulfillment_program: Option<FulfillmentProgram>,
 }
 
 uppercase_str_enum! {
