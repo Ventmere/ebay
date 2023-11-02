@@ -279,7 +279,7 @@ pub struct LineItem {
   #[serde(rename = "purchaseMarketplaceId")]
   pub purchase_marketplace_id: String,
   pub quantity: i32,
-  pub sku: String,
+  pub sku: Option<String>,
   #[serde(rename = "soldFormat")]
   pub sold_format: String,
   pub taxes: Vec<Tax>,
